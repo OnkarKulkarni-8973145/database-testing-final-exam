@@ -122,3 +122,4 @@ docker-compose up -d
 ```bash
 docker-compose up -d --build
 ```
+Database configuration can be edited in .env file situated under /persistence-service
