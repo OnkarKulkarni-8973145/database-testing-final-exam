@@ -5,17 +5,17 @@ import bookApi from "../persistence-service/backend/src/api/bookApi";
 import { book } from "../persistence-service/backend/src/entities/book";
 import { MockBookApiDataConnector } from "../books/BookApi";
 
-describe("BookApi", () => {
+describe("bookApi", () => {
   let app: Express;
   let dataSource: DataSource;
   let mockDataConnector: MockBookApiDataConnector;
-  let bookApi: BookApi;
+  let bookApi: bookApi;
 
   beforeEach(() => {
     app = express();
     mockDataConnector = new MockBookApiDataConnector();
-    dataSource = new DataSource({ type: "sqlite", database: ":memory:", synchronize: true, entities: [Book] });
-    bookApi = new BookApi(mockDataConnector, dataSource, app);
+    dataSource = new DataSource({ type: "sqlite", database: ":memory:", synchronize: true, entities: [book] });
+    bookApi = new bookApi(mockDataConnector, dataSource, app);
   });
     describe("PUT /book/:book_id", () => {
         it("should update an existing book", async () => {
