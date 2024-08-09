@@ -110,8 +110,8 @@ docker-compose build
 docker-compose up -d
 ```
 
-#### Build and Run the image
+#### Build the image
 
 ```bash
-docker-compose up -d --build
+docker-compose up --build
 ```
