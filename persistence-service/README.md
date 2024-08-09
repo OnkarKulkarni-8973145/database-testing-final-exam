@@ -122,4 +122,22 @@ docker-compose up -d
 ```bash
 docker-compose up -d --build
 ```
-Database configuration can be edited in .env file situated under /persistence-service
+
+#### Configuring .env file
+Managing Database Configuration
+Location of .env File:
+
+Path: /persistence-service/.env
+Description: This file contains environment variables for configuring your database connection.
+
+Open the .env file located in the /persistence-service directory using a text editor.
+Define your database connection settings in this file. 
+
+Accessing Environment Variables in Code:
+Ensure your application reads these environment variables. Depending on your technology stack, you may need to use a library or built-in functionality to access these variables. For example, in Node.js, you can use process.env to access them
+
+Security Considerations:
+Make sure the .env file is not included in version control (e.g., add it to .gitignore if you're using Git) to prevent sensitive information from being exposed.
+Applying Configuration Changes:
+
+After editing the .env file, restart your application or service to apply the new configuration settings.
