@@ -1,8 +1,8 @@
 import express, { Express } from "express";
 import request from "supertest";
 import { DataSource } from "typeorm";
-import BookApi from "../books/BookApi";
-import { Book } from "../books/Books";
+import bookApi from "../persistence-service/backend/src/api/bookApi";
+import { book } from "../persistence-service/backend/src/entities/book";
 import { MockBookApiDataConnector } from "../books/BookApi";
 
 describe("BookApi", () => {
@@ -17,7 +17,7 @@ describe("BookApi", () => {
     dataSource = new DataSource({ type: "sqlite", database: ":memory:", synchronize: true, entities: [Book] });
     bookApi = new BookApi(mockDataConnector, dataSource, app);
   });
-  
+
     describe("GET /books", () => {
         it("should return all books", async () => {
         const response = await request(app).get("/books");
