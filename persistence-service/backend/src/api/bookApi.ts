@@ -1,20 +1,19 @@
 import { Express } from "express";
-import { DataSource } from "typeorm";
-import { Photo } from "../entities/photo";
-import PhotoRepository from "../repositories/photo-repository/photoRepository";
+import Book from "../entities/book";
+import BookRepository from "../repositories/book-repository/bookRepository";
 import Result from "../utils/result";
 
-export default class PhotoApi {
-    #photoRepository: PhotoRepository;
+export default class BookApi {
+    #bookRepository: BookRepository;
     #express: Express;
 
-    constructor(photoRepository: PhotoRepository, express: Express) {
-        this.#photoRepository = photoRepository;
+    constructor(bookRepository: BookRepository, express: Express) {
+        this.#bookRepository = bookRepository;
         this.#express = express;
 
-        this.#express.get("/photo/:id", async (req, res) => {
+        this.#express.get("/book/:id", async (req, res) => {
             try {
-                const result: Result<Photo> = await this.#photoRepository.get(req.params.id);
+                const result: Result<Book> = await this.#bookRepository.get(req.params.id);
 
                 if (result.error && result.errorCode) {
                     res.status(result.errorCode).json({ message: result.error });
@@ -27,29 +26,34 @@ export default class PhotoApi {
             }
         });
 
-        this.#express.get("/photos", async (req, res) => {
+        this.#express.get("/books", async (req, res) => {
             try {
-                const photos = await this.#photoRepository.getAll();
+                const books = await this.#bookRepository.getAll();
         
-                res.status(200).json(photos);
+                res.status(200).json(books.data);
             } catch (err) {
-                console.error('Failed to retrieve photos:', err);
+                console.error('Failed to retrieve book:', err);
                 res.status(500).json({ error: 'Internal server error' });
             }
         });
 
-        this.#express.post("/photo", async (req, res) => {
+        this.#express.post("/book", async (req, res) => {
             const { body } = req;
             console.log(body);
 
-            const photo = new Photo();
+            const book = new Book();
 
-            photo.name = body.name;
-            photo.description = body.description;
-            photo.filename = body.filename;
+            book.title = body.title;
+            book.genre = body.genre;
+            book.publish_date = body.publish_date;
+            book.format = body.format;
+            book.price = body.price;
+            book.author_id = body.author_id;
+            book.publisher_id = body.publisher_id
+
 
             try {
-                let result = await this.#photoRepository.post(photo);
+                let result = await this.#bookRepository.post(book);
                 
                 if (result.error && result.errorCode) {
                     res.status(result.errorCode).json({ message: result.error });
@@ -62,28 +66,28 @@ export default class PhotoApi {
             }
         });
 
-        this.#express.put("/photo/:id", async (req, res) => {
+        this.#express.put("/book/:id", async (req, res) => {
             const { id } = req.params;
             const { body } = req;
         
-            // Parse and validate the photoId
-            const photoId = parseInt(id);
-            if (isNaN(photoId)) {
+            const book_id = parseInt(id);
+            if (isNaN(book_id)) {
                 return res.status(400).json({ message: 'ID must be a number' });
             }
-        
-            const photo: Photo = {
-                id: photoId,
-                name: body.name,
-                description: body.description,
-                filename: body.filename,
-                views: body.views,
-                isPublished: body.isPublished
-            };
+
+            const book: Book = new Book();
+
+            book.book_id = book_id;
+            book.title = body.title;
+            book.genre = body.genre;
+            book.publish_date = body.publish_date;
+            book.format = body.format;
+            book.price = body.price;
+            book.author_id = body.author_id;
+            book.publisher_id = body.publisher_id
         
             try {
-                // Perform the update operation
-                let result = await this.#photoRepository.put(photo);
+                let result = await this.#bookRepository.put(book);
         
                 if (result.error && result.errorCode) {
                     res.status(result.errorCode).json({ message: result.error });
@@ -96,11 +100,11 @@ export default class PhotoApi {
             }
         });
         
-        this.#express.delete("/photo/:id", async (req, res) => {
+        this.#express.delete("/book/:id", async (req, res) => {
             const { id } = req.params;
 
             try {
-                let result = await this.#photoRepository.delete(id);
+                let result = await this.#bookRepository.delete(id);
         
                 if (result.error && result.errorCode) {
                     res.status(result.errorCode).json({ message: result.error });

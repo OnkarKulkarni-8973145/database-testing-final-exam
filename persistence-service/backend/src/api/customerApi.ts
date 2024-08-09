@@ -1,20 +1,19 @@
 import { Express } from "express";
-import { DataSource } from "typeorm";
-import { Photo } from "../entities/photo";
-import PhotoRepository from "../repositories/photo-repository/photoRepository";
+import Customer from "../entities/customer";
+import CustomerRepository from "../repositories/customer-repository/customerRepository";
 import Result from "../utils/result";
 
-export default class PhotoApi {
-    #photoRepository: PhotoRepository;
+export default class CustomerApi {
+    #customerRepository: CustomerRepository;
     #express: Express;
 
-    constructor(photoRepository: PhotoRepository, express: Express) {
-        this.#photoRepository = photoRepository;
+    constructor(customerRepository: CustomerRepository, express: Express) {
+        this.#customerRepository = customerRepository;
         this.#express = express;
 
-        this.#express.get("/photo/:id", async (req, res) => {
+        this.#express.get("/customer/:id", async (req, res) => {
             try {
-                const result: Result<Photo> = await this.#photoRepository.get(req.params.id);
+                const result: Result<Customer> = await this.#customerRepository.get(req.params.id);
 
                 if (result.error && result.errorCode) {
                     res.status(result.errorCode).json({ message: result.error });
@@ -27,29 +26,29 @@ export default class PhotoApi {
             }
         });
 
-        this.#express.get("/photos", async (req, res) => {
+        this.#express.get("/customers", async (req, res) => {
             try {
-                const photos = await this.#photoRepository.getAll();
+                const customers = await this.#customerRepository.getAll();
         
-                res.status(200).json(photos);
+                res.status(200).json(customers.data);
             } catch (err) {
-                console.error('Failed to retrieve photos:', err);
+                console.error('Failed to retrieve customer:', err);
                 res.status(500).json({ error: 'Internal server error' });
             }
         });
 
-        this.#express.post("/photo", async (req, res) => {
+        this.#express.post("/customer", async (req, res) => {
             const { body } = req;
             console.log(body);
 
-            const photo = new Photo();
+            const customer = new Customer();
 
-            photo.name = body.name;
-            photo.description = body.description;
-            photo.filename = body.filename;
+            customer.name = body.name;
+            customer.email = body.email;
+            customer.phone = body.phone;
 
             try {
-                let result = await this.#photoRepository.post(photo);
+                let result = await this.#customerRepository.post(customer);
                 
                 if (result.error && result.errorCode) {
                     res.status(result.errorCode).json({ message: result.error });
@@ -62,28 +61,24 @@ export default class PhotoApi {
             }
         });
 
-        this.#express.put("/photo/:id", async (req, res) => {
+        this.#express.put("/customer/:id", async (req, res) => {
             const { id } = req.params;
             const { body } = req;
         
-            // Parse and validate the photoId
-            const photoId = parseInt(id);
-            if (isNaN(photoId)) {
+            const customer_id = parseInt(id);
+            if (isNaN(customer_id)) {
                 return res.status(400).json({ message: 'ID must be a number' });
             }
-        
-            const photo: Photo = {
-                id: photoId,
-                name: body.name,
-                description: body.description,
-                filename: body.filename,
-                views: body.views,
-                isPublished: body.isPublished
-            };
+
+            const customer: Customer = new Customer();
+            customer.customer_id = customer_id;
+            customer.name = body.name;
+            customer.email = body.email;
+            customer.phone = body.phone;
+
         
             try {
-                // Perform the update operation
-                let result = await this.#photoRepository.put(photo);
+                let result = await this.#customerRepository.put(customer);
         
                 if (result.error && result.errorCode) {
                     res.status(result.errorCode).json({ message: result.error });
@@ -96,11 +91,11 @@ export default class PhotoApi {
             }
         });
         
-        this.#express.delete("/photo/:id", async (req, res) => {
+        this.#express.delete("/customer/:id", async (req, res) => {
             const { id } = req.params;
 
             try {
-                let result = await this.#photoRepository.delete(id);
+                let result = await this.#customerRepository.delete(id);
         
                 if (result.error && result.errorCode) {
                     res.status(result.errorCode).json({ message: result.error });
