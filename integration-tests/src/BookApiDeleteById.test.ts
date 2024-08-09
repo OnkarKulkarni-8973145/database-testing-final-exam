@@ -1,8 +1,8 @@
 import express, { Express } from "express";
 import request from "supertest";
 import { DataSource } from "typeorm";
-import BookApi from "../books/BookApi";
-import { Book } from "../books/Books";
+import bookApi from "../persistence-service/backend/src/api/bookApi";
+import { Book } from "../persistence-service/backend/src/entities/book";
 import { MockBookApiDataConnector } from "../books/BookApi";
 
 describe("BookApi", () => {
