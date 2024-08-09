@@ -39,14 +39,6 @@ Running this command will build a production ready version of the project.
 npm run build
 ```
 
-#### Lint
-
-Running this command will run ESLint on the Persistence Service project.
-
-```bash
-npm run lint
-```
-
 #### Testing
 
 Running this command will run all the tests
@@ -60,10 +52,6 @@ Running this command will run the tests in watch mode (the tests will re-run on 
 ```bash
 npm run test -- --watch
 ```
-
-### Using Dockerfile
-
----
 
 #### Build the Image
 
