@@ -41,13 +41,13 @@ npm run build
 
 #### Testing
 
-Running this command will run all the tests
+Running this command will run all the unit tests
 
 ```bash
 npm run test
 ```
 
-Running this command will run the tests in watch mode (the tests will re-run on save)
+Running this command will run the unit tests in watch mode (the unit tests will re-run on save)
 
 ```bash
 npm run test -- --watch
