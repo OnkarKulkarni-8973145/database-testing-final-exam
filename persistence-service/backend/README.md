@@ -76,3 +76,11 @@ This command will kill the running container and remove it.
 ```bash
 docker rm -f persistence
 ```
+
+apis are put under /src/api
+specific entities are put under /src/entities
+filtering option and dataconnector interfaces are put under /src/interfaces
+migration is put under /src/migration for dummy data
+specific repositories are put under /src/repositories
+result.ts  is put under /src/utils
+
